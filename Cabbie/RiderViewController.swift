@@ -15,7 +15,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
 
     //MARK:- IBOutlets
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var callUberButton: UIButton!
+    @IBOutlet weak var callCabbieButton: UIButton!
     
     //MARK:- Properties
     var locationManager = CLLocationManager()
@@ -28,6 +28,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
 
         initializeLocationManager()
+        checkForPendingCabbieRide()
         
     }
     
@@ -39,6 +40,19 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         
         locationManager.startUpdatingLocation()
+    }
+    
+    private func checkForPendingCabbieRide() {
+        if let email = Auth.auth().currentUser?.email {
+            //search DB for particular ride request
+            Database.database().reference().child("RideRequests").queryOrdered(byChild: "email").queryEqual(toValue: email).observe(.childAdded, with: { (snapshot) in
+                
+                //stop listening and reflect that the user is currently awaiting Cabbie
+                self.cabHasBeenCalled = true
+                self.callCabbieButton.setTitle("Cancel Cabbie", for: .normal)
+                Database.database().reference().child("RideRequests").removeAllObservers()
+            })
+        }
     }
     
     //MARK:- Delegate methods
@@ -68,7 +82,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     
     private func cancelCabbieRide(riderInfo: [String: Any]) {
         cabHasBeenCalled = false
-        callUberButton.setTitle("Call a Cabbie", for: .normal)
+        callCabbieButton.setTitle("Call a Cabbie", for: .normal)
         
         //remove the data from the database, searching for email
         Database.database().reference().child("RideRequests").queryOrdered(byChild: "email").queryEqual(toValue: riderInfo["email"]).observe(.childAdded) { (snapshot) in
@@ -82,9 +96,18 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK:- IBActions
     @IBAction private func handleLogoutTapped(_ sender: UIBarButtonItem) {
+        //because we've got our mapView embedded in a Nav Controller
+        navigationController?.dismiss(animated: true, completion: nil)
+        
+        do {
+            try Auth.auth().signOut()
+            //print("Successfully logged out user.")
+        } catch {
+            print("Unable to log out user.")
+        }
     }
     
-    @IBAction private func handleCallUberButtonTapped(_ sender: UIButton) {
+    @IBAction private func handleCallCabbieButtonTapped(_ sender: UIButton) {
         //grab the user's email address to form our database submission
         if let email = Auth.auth().currentUser?.email {
             let rideRequestDictionary: [String : Any] = [
@@ -105,7 +128,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
                 ref.setValue(rideRequestDictionary)
                 
                 cabHasBeenCalled = true
-                callUberButton.setTitle("Cancel Cabbie", for: .normal)
+                callCabbieButton.setTitle("Cancel Cabbie", for: .normal)
             }
         }
     }

@@ -130,7 +130,7 @@
                                 <rect key="frame" x="162" y="466" width="90" height="30"/>
                                 <state key="normal" title="Call a Cabbie"/>
                                 <connections>
-                                    <action selector="handleCallUberButtonTapped:" destination="cGC-WZ-Czi" eventType="touchUpInside" id="176-C2-9Ma"/>
+                                    <action selector="handleCallCabbieButtonTapped:" destination="cGC-WZ-Czi" eventType="touchUpInside" id="Hdg-IK-Jff"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -152,7 +152,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="callUberButton" destination="NBN-Bi-F4y" id="Hzx-8M-q32"/>
+                        <outlet property="callCabbieButton" destination="NBN-Bi-F4y" id="5s0-ae-cER"/>
                         <outlet property="mapView" destination="892-Wh-1Az" id="HNd-av-LbD"/>
                     </connections>
                 </viewController>
