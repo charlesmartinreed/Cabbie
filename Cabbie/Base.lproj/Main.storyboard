@@ -127,8 +127,8 @@
                                 </constraints>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBN-Bi-F4y">
-                                <rect key="frame" x="165" y="466" width="84" height="30"/>
-                                <state key="normal" title="Call an Uber"/>
+                                <rect key="frame" x="162" y="466" width="90" height="30"/>
+                                <state key="normal" title="Call a Cabbie"/>
                                 <connections>
                                     <action selector="handleCallUberButtonTapped:" destination="cGC-WZ-Czi" eventType="touchUpInside" id="176-C2-9Ma"/>
                                 </connections>

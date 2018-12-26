@@ -20,6 +20,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     //MARK:- Properties
     var locationManager = CLLocationManager()
     var currentLocation = CLLocationCoordinate2D()
+    var cabHasBeenCalled = false
     var ref: DatabaseReference!
     
     
@@ -65,6 +66,20 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    private func cancelCabbieRide(riderInfo: [String: Any]) {
+        cabHasBeenCalled = false
+        callUberButton.setTitle("Call a Cabbie", for: .normal)
+        
+        //remove the data from the database, searching for email
+        Database.database().reference().child("RideRequests").queryOrdered(byChild: "email").queryEqual(toValue: riderInfo["email"]).observe(.childAdded) { (snapshot) in
+            //remove the thing
+            snapshot.ref.removeValue()
+            
+            //stop the add-delete entry loop
+            Database.database().reference().child("RideRequests").removeAllObservers()
+        }
+    }
+    
     //MARK:- IBActions
     @IBAction private func handleLogoutTapped(_ sender: UIBarButtonItem) {
     }
@@ -72,16 +87,26 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction private func handleCallUberButtonTapped(_ sender: UIButton) {
         //grab the user's email address to form our database submission
         if let email = Auth.auth().currentUser?.email {
-           
             let rideRequestDictionary: [String : Any] = [
                 "email": email,
                 "lat": currentLocation.latitude,
-                "long": currentLocation.longitude
-                ]
+                "long": currentLocation.longitude]
             
-            //define the Firebase reference
-            ref = Database.database().reference().child("RideRequests").childByAutoId()
-            ref.setValue(rideRequestDictionary)
+            
+            
+            //check to see whether or not cab has been summoned
+            if cabHasBeenCalled {
+                //cancel
+                cancelCabbieRide(riderInfo: rideRequestDictionary)
+            } else {
+                //cab has not been hailed
+                //define the Firebase reference
+                ref = Database.database().reference().child("RideRequests").childByAutoId()
+                ref.setValue(rideRequestDictionary)
+                
+                cabHasBeenCalled = true
+                callUberButton.setTitle("Cancel Cabbie", for: .normal)
+            }
         }
     }
     
