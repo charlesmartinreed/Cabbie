@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import MapKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class DriverViewController: UITableViewController {
+class DriverViewController: UITableViewController, CLLocationManagerDelegate {
 
     //MARK:- Properties
     let cellId = "rideRequestCell"
+    var rideRequests: [DataSnapshot] = []
+    var locationManager = CLLocationManager()
+    var driverLocation = CLLocationCoordinate2D()
+    
     
     //MARK:- IBoutlets
     @IBOutlet weak var logoutButton: UIBarButtonItem!
@@ -21,6 +26,42 @@ class DriverViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //setup the location manager
+        initializeLocationManager()
+        
+        //make a request for pending ride requests
+        searchForPendingRideRequests()
+        
+        //update the table view to reflect updated distance between driver and rider
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { (timer) in
+            self.tableView.reloadData()
+        }
+        
+    }
+    
+    //MARK:- Location delegate methods
+    private func initializeLocationManager() {
+        //map setup
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //driver's location?
+        if let coordinates = manager.location?.coordinate {
+            driverLocation = coordinates
+        }
+    }
+    
+    private func searchForPendingRideRequests() {
+        Database.database().reference().child("RideRequests").observe(.childAdded) { (snapshot) in
+            //each snapshot is a ride request
+            self.rideRequests.append(snapshot)
+            self.tableView.reloadData()
+        }
     }
     
     //MARK:- IBActions
@@ -37,14 +78,39 @@ class DriverViewController: UITableViewController {
     //MARK:- Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 10
+        return rideRequests.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .red
-        cell.textLabel?.text = "Rider #: \(indexPath.row)"
+        
+        //provide the user info and distance
+        let snapshot = rideRequests[indexPath.row]
+        if let rideRequestDictionary = snapshot.value as? [String: Any] {
+            if let email = rideRequestDictionary["email"] as? String {
+                
+                if let lat = rideRequestDictionary["lat"] as? Double, let long = rideRequestDictionary["long"] as? Double {
+                    
+                    //convert driver location as a CLLocation,
+                    let driverCLLocation = CLLocation(latitude: driverLocation.latitude, longitude: driverLocation.longitude)
+                    let riderCLLocation = CLLocation(latitude: lat, longitude: long)
+                    
+                    let distance = distanceBetweenDriverAndRider(driver: driverCLLocation, rider: riderCLLocation)
+                    
+                    cell.textLabel?.text = "\(email) - \(distance)km away"
+                }
+            }
+        }
+    
         return cell
+    }
+    
+    private func distanceBetweenDriverAndRider(driver: CLLocation, rider: CLLocation) -> Double {
+        
+        let distanceInKM = driver.distance(from: rider) / 1000
+        let roundedDistance = round(distanceInKM * 100) / 100
+        
+        return roundedDistance
     }
 
 }
