@@ -24,13 +24,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="you@example.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QQw-cN-kkY">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="dijol@yahoo.com" borderStyle="roundedRect" placeholder="you@example.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QQw-cN-kkY">
                                 <rect key="frame" x="20" y="64" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XzQ-dZ-I1p">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="abc123" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XzQ-dZ-I1p">
                                 <rect key="frame" x="20" y="102" width="374" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -105,10 +105,65 @@
                         <outlet property="riderDriverSwitch" destination="TkV-UP-soS" id="gWM-gB-4Hd"/>
                         <outlet property="riderLabel" destination="pyh-FA-KQj" id="OW5-LY-sm1"/>
                         <outlet property="topButton" destination="y0Y-pC-dG6" id="wEE-bK-FfG"/>
+                        <segue destination="3c4-rR-PGR" kind="presentation" identifier="riderSegue" id="k7c-0i-y1W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-326" y="-466"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="3hh-yI-J6F">
+            <objects>
+                <viewController id="cGC-WZ-Czi" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Wad-q3-Iiy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="892-Wh-1Az">
+                                <rect key="frame" x="20" y="84" width="374" height="374"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="892-Wh-1Az" secondAttribute="height" multiplier="1:1" id="7El-Zl-L4c"/>
+                                </constraints>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBN-Bi-F4y">
+                                <rect key="frame" x="165" y="466" width="84" height="30"/>
+                                <state key="normal" title="Call an Uber"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="892-Wh-1Az" firstAttribute="top" secondItem="sdr-xU-Fcu" secondAttribute="top" constant="20" id="6FL-as-aU6"/>
+                            <constraint firstItem="892-Wh-1Az" firstAttribute="leading" secondItem="sdr-xU-Fcu" secondAttribute="leading" constant="20" id="YjX-bt-fZ7"/>
+                            <constraint firstItem="sdr-xU-Fcu" firstAttribute="trailing" secondItem="892-Wh-1Az" secondAttribute="trailing" constant="20" id="lvv-GE-gCT"/>
+                            <constraint firstItem="NBN-Bi-F4y" firstAttribute="top" secondItem="892-Wh-1Az" secondAttribute="bottom" constant="8" id="rpr-L1-KF0"/>
+                            <constraint firstItem="NBN-Bi-F4y" firstAttribute="centerX" secondItem="Wad-q3-Iiy" secondAttribute="centerX" id="us8-mf-55E"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="sdr-xU-Fcu"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6Oh-Ic-CPC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uvo-o6-OIn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="81" y="259"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2W7-ZC-4cc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3c4-rR-PGR" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="72u-tL-vdV">
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="cGC-WZ-Czi" kind="relationship" relationship="rootViewController" id="Uei-yT-qn1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AOL-Dj-iHM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-806" y="260"/>
         </scene>
     </scenes>
 </document>

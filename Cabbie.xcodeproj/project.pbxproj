@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C56A15821D314FD007A8BB7 /* RiderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C56A15721D314FD007A8BB7 /* RiderViewController.swift */; };
 		8CCD54A221D1AD8600684240 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD54A121D1AD8600684240 /* AppDelegate.swift */; };
 		8CCD54A421D1AD8600684240 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD54A321D1AD8600684240 /* ViewController.swift */; };
 		8CCD54A721D1AD8600684240 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8CCD54A521D1AD8600684240 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 		0AA931CFC4533F55DDAF2518 /* Pods_Cabbie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cabbie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CB9D4C65D96DCC27A8E4288 /* Pods-Cabbie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cabbie.release.xcconfig"; path = "Pods/Target Support Files/Pods-Cabbie/Pods-Cabbie.release.xcconfig"; sourceTree = "<group>"; };
 		73A100DB6D275DD46316AC19 /* Pods-Cabbie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cabbie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Cabbie/Pods-Cabbie.debug.xcconfig"; sourceTree = "<group>"; };
+		8C56A15721D314FD007A8BB7 /* RiderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiderViewController.swift; sourceTree = "<group>"; };
 		8CCD549E21D1AD8600684240 /* Cabbie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cabbie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CCD54A121D1AD8600684240 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8CCD54A321D1AD8600684240 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				8CCD54A121D1AD8600684240 /* AppDelegate.swift */,
 				8CCD54A321D1AD8600684240 /* ViewController.swift */,
 				8CCD54A521D1AD8600684240 /* Main.storyboard */,
+				8C56A15721D314FD007A8BB7 /* RiderViewController.swift */,
 				8CCD54A821D1AD8800684240 /* Assets.xcassets */,
 				8CCD54AA21D1AD8800684240 /* LaunchScreen.storyboard */,
 				8CCD54AD21D1AD8800684240 /* Info.plist */,
@@ -209,6 +212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CCD54A421D1AD8600684240 /* ViewController.swift in Sources */,
+				8C56A15821D314FD007A8BB7 /* RiderViewController.swift in Sources */,
 				8CCD54A221D1AD8600684240 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

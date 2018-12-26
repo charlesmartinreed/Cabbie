@@ -59,6 +59,7 @@ class ViewController: UIViewController {
                     } else {
                         guard let user = authResult?.user else { return }
                         print("Sign up was successful!")
+                        self.performSegue(withIdentifier: "riderSegue", sender: nil)
                     }
                 }
             } else {
@@ -68,6 +69,8 @@ class ViewController: UIViewController {
                     } else {
                         guard let user = user?.user else { return }
                         print("Login in was successful")
+                        //pass to the rider view
+                        self.performSegue(withIdentifier: "riderSegue", sender: nil)
                     }
                 }
             }
