@@ -112,10 +112,10 @@
             </objects>
             <point key="canvasLocation" x="-326" y="-466"/>
         </scene>
-        <!--View Controller-->
+        <!--Rider View Controller-->
         <scene sceneID="3hh-yI-J6F">
             <objects>
-                <viewController id="cGC-WZ-Czi" sceneMemberID="viewController">
+                <viewController id="cGC-WZ-Czi" customClass="RiderViewController" customModule="Cabbie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wad-q3-Iiy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -129,6 +129,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBN-Bi-F4y">
                                 <rect key="frame" x="165" y="466" width="84" height="30"/>
                                 <state key="normal" title="Call an Uber"/>
+                                <connections>
+                                    <action selector="handleCallUberButtonTapped:" destination="cGC-WZ-Czi" eventType="touchUpInside" id="176-C2-9Ma"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -141,7 +144,17 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="sdr-xU-Fcu"/>
                     </view>
-                    <navigationItem key="navigationItem" id="6Oh-Ic-CPC"/>
+                    <navigationItem key="navigationItem" id="6Oh-Ic-CPC">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="YoL-kT-HCy">
+                            <connections>
+                                <action selector="handleLogoutTapped:" destination="cGC-WZ-Czi" id="OOy-62-ONU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="callUberButton" destination="NBN-Bi-F4y" id="Hzx-8M-q32"/>
+                        <outlet property="mapView" destination="892-Wh-1Az" id="HNd-av-LbD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uvo-o6-OIn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
