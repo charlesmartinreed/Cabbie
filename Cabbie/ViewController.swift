@@ -42,6 +42,45 @@ class ViewController: UIViewController {
     
     //MARK:- IBActions
     
+    private func signUpNewUser(userEmail: String, userPassword: String) {
+        Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (authResult, error) in
+            if let err = error {
+                self.displayAlert(title: "Error", message: err.localizedDescription)
+            } else {
+                //guard let user = authResult?.user else { return }
+                if self.riderDriverSwitch.isOn {
+                    //if on, user is a DRIVER
+                    let req = Auth.auth().currentUser?.createProfileChangeRequest()
+                    req?.displayName = "Driver"
+                    req?.commitChanges(completion: nil)
+                    self.performSegue(withIdentifier: "driverSegue", sender: nil)
+                } else {
+                    //user is a RIDER
+                    let req = Auth.auth().currentUser?.createProfileChangeRequest()
+                    req?.displayName = "Rider"
+                    req?.commitChanges(completion: nil)
+                    self.performSegue(withIdentifier: "riderSegue", sender: nil)
+                }
+            }
+        }
+    }
+    
+    private func loginExistingUser(userEmail: String, userPassword: String) {
+        Auth.auth().signIn(withEmail: userEmail, password: userPassword) { (user, error) in
+            if let err = error {
+                self.displayAlert(title: "Error", message: err.localizedDescription)
+            } else {
+                guard let user = user?.user else { return }
+                if user.displayName == "Driver" {
+                    self.performSegue(withIdentifier: "driverSegue", sender: nil)
+                } else {
+                    //pass to the rider view
+                    self.performSegue(withIdentifier: "riderSegue", sender: nil)
+                }
+            }
+        }
+    }
+    
     @IBAction func handleTopTapped(_ sender: UIButton) {
         guard let userEmail = emailTextField.text else { return }
         guard let userPassword = passwordTextField.text else { return }
@@ -53,26 +92,9 @@ class ViewController: UIViewController {
             //let's handle our authentication
             //check whether log in or sign up
             if signUpMode {
-                Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (authResult, error) in
-                    if let err = error {
-                        self.displayAlert(title: "Error", message: err.localizedDescription)
-                    } else {
-                        guard let user = authResult?.user else { return }
-                        print("Sign up was successful!")
-                        self.performSegue(withIdentifier: "riderSegue", sender: nil)
-                    }
-                }
+               signUpNewUser(userEmail: userEmail, userPassword: userPassword)
             } else {
-                Auth.auth().signIn(withEmail: userEmail, password: userPassword) { (user, error) in
-                    if let err = error {
-                        self.displayAlert(title: "Error", message: err.localizedDescription)
-                    } else {
-                        guard let user = user?.user else { return }
-                        print("Login in was successful")
-                        //pass to the rider view
-                        self.performSegue(withIdentifier: "riderSegue", sender: nil)
-                    }
-                }
+                loginExistingUser(userEmail: userEmail, userPassword: userPassword)
             }
         }
     }
