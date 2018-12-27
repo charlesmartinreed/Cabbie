@@ -126,6 +126,7 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
                                 destinationVC.requestEmail = email
                                 let location = CLLocationCoordinate2D(latitude: lat, longitude: long)
                                 destinationVC.requestLocation = location
+                                destinationVC.driverLocation = driverLocation
                         }
                     }
                 }
