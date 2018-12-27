@@ -193,11 +193,52 @@
                     </navigationItem>
                     <connections>
                         <outlet property="logoutButton" destination="z6N-8A-2nU" id="ocd-UL-YXM"/>
+                        <segue destination="7L1-r0-NEd" kind="show" identifier="acceptRequestSegue" id="EXQ-3g-NZk"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aPg-lm-OnF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="128" y="1022"/>
+        </scene>
+        <!--Accept Request View Controller-->
+        <scene sceneID="a2t-VT-B0B">
+            <objects>
+                <viewController id="7L1-r0-NEd" customClass="AcceptRequestViewController" customModule="Cabbie" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8BN-t9-mod">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cfG-Oh-x2t">
+                                <rect key="frame" x="20" y="84" width="374" height="374"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="cfG-Oh-x2t" secondAttribute="height" multiplier="1:1" id="bd3-hr-IK5"/>
+                                </constraints>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OgH-SO-7FJ">
+                                <rect key="frame" x="152.66666666666666" y="466" width="108.99999999999997" height="30"/>
+                                <state key="normal" title="Accept Request"/>
+                                <connections>
+                                    <action selector="acceptRequestButtonTapped:" destination="7L1-r0-NEd" eventType="touchUpInside" id="pNF-cJ-smV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cfG-Oh-x2t" firstAttribute="top" secondItem="wAA-Kt-oEM" secondAttribute="top" constant="20" id="1pK-RW-Y0l"/>
+                            <constraint firstItem="cfG-Oh-x2t" firstAttribute="leading" secondItem="wAA-Kt-oEM" secondAttribute="leading" constant="20" id="2m2-d8-TRl"/>
+                            <constraint firstItem="OgH-SO-7FJ" firstAttribute="top" secondItem="cfG-Oh-x2t" secondAttribute="bottom" constant="8" id="3eH-Pv-xDb"/>
+                            <constraint firstItem="OgH-SO-7FJ" firstAttribute="centerX" secondItem="8BN-t9-mod" secondAttribute="centerX" id="RPv-Ck-csN"/>
+                            <constraint firstItem="wAA-Kt-oEM" firstAttribute="trailing" secondItem="cfG-Oh-x2t" secondAttribute="trailing" constant="20" id="tZi-2S-N8l"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="wAA-Kt-oEM"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="cfG-Oh-x2t" id="N3c-Yd-YIb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n1H-AJ-Jtc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="979.71014492753636" y="1021.4673913043479"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2W7-ZC-4cc">

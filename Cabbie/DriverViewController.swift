@@ -112,5 +112,33 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
         
         return roundedDistance
     }
+    
+    //MARK:- Segue methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? AcceptRequestViewController {
+            
+            //check that the sender is a snapshot object
+            if let snapshot = sender as? DataSnapshot {
+                //grab email, lat and long
+                if let rideRequestDictionary = snapshot.value as? [String: Any] {
+                    if let email = rideRequestDictionary["email"] as? String {
+                        if let lat = rideRequestDictionary["lat"] as? Double, let long = rideRequestDictionary["long"] as? Double {
+                                destinationVC.requestEmail = email
+                                let location = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                                destinationVC.requestLocation = location
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //segue to the accept request view - sender should reflect the user info
+        let snapshot = rideRequests[indexPath.row]
+        performSegue(withIdentifier: "acceptRequestSegue", sender: snapshot)
+    }
+    
+
 
 }
