@@ -11,7 +11,7 @@ import MapKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class RiderViewController: UIViewController, CLLocationManagerDelegate {
+class RiderViewController: UIViewController, CLLocationManagerDelegate, DriverViewDelegate {
 
     //MARK:- IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -19,13 +19,20 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK:- Properties
     var locationManager = CLLocationManager()
-    var currentLocation = CLLocationCoordinate2D()
+    var userLocation = CLLocationCoordinate2D()
+    var driverLocation = CLLocationCoordinate2D()
+    
     var cabHasBeenCalled = false
+    var driverIsOnTheWay = false
     var ref: DatabaseReference!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //create the driver instance
+        let driver = DriverViewController()
+        driver.delegate = self
 
         initializeLocationManager()
         checkForPendingCabbieRide()
@@ -51,9 +58,41 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
                 self.cabHasBeenCalled = true
                 self.callCabbieButton.setTitle("Cancel Cabbie", for: .normal)
                 Database.database().reference().child("RideRequests").removeAllObservers()
+                
+                //reflect how far away the driver is on the rider's UI
+                if let rideRequestDictionary = snapshot.value as? [String:Any] {
+                    if let driverLat = rideRequestDictionary["driverLat"] as? Double {
+                        if let driverLong = rideRequestDictionary["driverLong"] as? Double {
+                            //we know the driver is coming, update the driver location
+                            self.driverLocation = CLLocationCoordinate2D(latitude: driverLat, longitude: driverLong)
+                            self.driverIsOnTheWay = true
+                            self.displayDriverAndRiderOnMap()
+                        }
+                    }
+                }
             })
         }
     }
+    
+    private func displayDriverAndRiderOnMap() {
+        //show both driver and rider on the map to illustrate distance between them
+        let driverCLLocation = CLLocation(latitude: driverLocation.latitude, longitude: driverLocation.longitude)
+        let riderCLLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        let distance = distanceBetweenDriverAndRider(driver: driverCLLocation, rider: riderCLLocation)
+    
+    }
+    
+    //MARK:- DriverViewController protocol method
+    func distanceBetweenDriverAndRider(driver: CLLocation, rider: CLLocation) -> Double {
+        
+        let distanceInKM = driver.distance(from: rider) / 1000
+        let roundedDistance = round(distanceInKM * 100) / 100
+        
+        callCabbieButton.setTitle("Your driver is \(roundedDistance)km away!", for: .normal)
+        
+        return roundedDistance
+    }
+    
     
     //MARK:- Delegate methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -66,7 +105,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
             let region = MKCoordinateRegion(center: center, span: span)
             
             //set the user location
-            currentLocation = center
+            userLocation = center
             
             mapView.setRegion(region, animated: true)
             
@@ -90,7 +129,7 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
             snapshot.ref.removeValue()
             
             //stop the add-delete entry loop
-            Database.database().reference().child("RideRequests").removeAllObservers()
+        Database.database().reference().child("RideRequests").removeAllObservers()
         }
     }
     
@@ -109,28 +148,31 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction private func handleCallCabbieButtonTapped(_ sender: UIButton) {
         //grab the user's email address to form our database submission
-        if let email = Auth.auth().currentUser?.email {
-            let rideRequestDictionary: [String : Any] = [
-                "email": email,
-                "lat": currentLocation.latitude,
-                "long": currentLocation.longitude]
-            
-            
-            
-            //check to see whether or not cab has been summoned
-            if cabHasBeenCalled {
-                //cancel
-                cancelCabbieRide(riderInfo: rideRequestDictionary)
-            } else {
-                //cab has not been hailed
-                //define the Firebase reference
-                ref = Database.database().reference().child("RideRequests").childByAutoId()
-                ref.setValue(rideRequestDictionary)
+        if !driverIsOnTheWay {
+            if let email = Auth.auth().currentUser?.email {
+                let rideRequestDictionary: [String : Any] = [
+                    "email": email,
+                    "lat": userLocation.latitude,
+                    "long": userLocation.longitude]
                 
-                cabHasBeenCalled = true
-                callCabbieButton.setTitle("Cancel Cabbie", for: .normal)
+                
+                
+                //check to see whether or not cab has been summoned
+                if cabHasBeenCalled {
+                    //cancel
+                    cancelCabbieRide(riderInfo: rideRequestDictionary)
+                } else {
+                    //cab has not been hailed
+                    //define the Firebase reference
+                    ref = Database.database().reference().child("RideRequests").childByAutoId()
+                    ref.setValue(rideRequestDictionary)
+                    
+                    cabHasBeenCalled = true
+                    callCabbieButton.setTitle("Cancel Cabbie", for: .normal)
+                }
             }
-        }
+        } //on the way
+        
     }
     
 }

@@ -11,6 +11,10 @@ import MapKit
 import FirebaseAuth
 import FirebaseDatabase
 
+protocol DriverViewDelegate: class {
+    func distanceBetweenDriverAndRider(driver: CLLocation, rider: CLLocation) -> Double
+}
+
 class DriverViewController: UITableViewController, CLLocationManagerDelegate {
 
     //MARK:- Properties
@@ -18,6 +22,9 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
     var rideRequests: [DataSnapshot] = []
     var locationManager = CLLocationManager()
     var driverLocation = CLLocationCoordinate2D()
+    
+    //MARK:- Delegate property
+    weak var delegate: DriverViewDelegate?
     
     
     //MARK:- IBoutlets
@@ -58,9 +65,17 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
     
     private func searchForPendingRideRequests() {
         Database.database().reference().child("RideRequests").observe(.childAdded) { (snapshot) in
-            //each snapshot is a ride request
-            self.rideRequests.append(snapshot)
-            self.tableView.reloadData()
+            //if there's a driverLat, there's a ride on the way
+            if let rideRequestDictionary = snapshot.value as? [String:Any] {
+                if let driverLat = rideRequestDictionary["driverLat"] as? Double {
+                    //do nothing... which feels like bad code...
+                } else {
+                    //each snapshot is a ride request
+                    self.rideRequests.append(snapshot)
+                    self.tableView.reloadData()
+                }
+            }
+            
         }
     }
     
@@ -105,7 +120,7 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
         return cell
     }
     
-    private func distanceBetweenDriverAndRider(driver: CLLocation, rider: CLLocation) -> Double {
+    func distanceBetweenDriverAndRider(driver: CLLocation, rider: CLLocation) -> Double {
         
         let distanceInKM = driver.distance(from: rider) / 1000
         let roundedDistance = round(distanceInKM * 100) / 100
