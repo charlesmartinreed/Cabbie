@@ -71,6 +71,13 @@
                                     <action selector="handleBottomTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oJj-Eh-dda"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBv-8R-bEZ">
+                                <rect key="frame" x="150" y="328" width="114" height="30"/>
+                                <state key="normal" title="Contact Support"/>
+                                <connections>
+                                    <action selector="handleContactSupportTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fTa-nf-tKi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -94,6 +101,8 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QQw-cN-kkY" secondAttribute="trailing" constant="20" id="hZ3-0K-DUX"/>
                             <constraint firstItem="QQw-cN-kkY" firstAttribute="top" secondItem="SkI-eY-rm3" secondAttribute="bottom" constant="7.6666666666666714" id="iP5-aj-WVg"/>
                             <constraint firstItem="XzQ-dZ-I1p" firstAttribute="top" secondItem="QQw-cN-kkY" secondAttribute="bottom" constant="8" id="jai-d8-TOr"/>
+                            <constraint firstItem="dBv-8R-bEZ" firstAttribute="top" secondItem="oth-rO-YxZ" secondAttribute="bottom" constant="52" id="o8W-Cd-cd3"/>
+                            <constraint firstItem="dBv-8R-bEZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ock-vp-InP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

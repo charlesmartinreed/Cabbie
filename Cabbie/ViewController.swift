@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import MessageUI
 
 class ViewController: UIViewController {
     
@@ -22,6 +23,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomButton: UIButton!
     
     var signUpMode = true
+    var testEmailAccounts: [String] = ["charlesmartinreed@icloud.com"]
     var handle: AuthStateDidChangeListenerHandle!
     
 
@@ -39,8 +41,6 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         Auth.auth().removeStateDidChangeListener(handle)
     }
-    
-    //MARK:- IBActions
     
     private func signUpNewUser(userEmail: String, userPassword: String) {
         Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (authResult, error) in
@@ -81,6 +81,24 @@ class ViewController: UIViewController {
         }
     }
     
+    func showMailComposer() {
+        //check whether or not the user can send me
+        guard MFMailComposeViewController.canSendMail() else {
+            displayAlert(title: "Unable to send email", message: "Sorry, but this application does not have permission to access your email client.")
+            return
+        }
+        
+        //create the mail composer
+        let composer = MFMailComposeViewController()
+        composer.mailComposeDelegate = self
+        composer.setToRecipients(testEmailAccounts)
+        composer.setSubject("Support email test")
+        composer.setMessageBody("If you're reading this, the mail composer functionality is working as intended!", isHTML: false)
+        
+        present(composer, animated: true, completion: nil)
+    }
+    
+    //MARK:- IBActions
     @IBAction func handleTopTapped(_ sender: UIButton) {
         guard let userEmail = emailTextField.text else { return }
         guard let userPassword = passwordTextField.text else { return }
@@ -129,6 +147,35 @@ class ViewController: UIViewController {
         
     }
     
-    
+    @IBAction func handleContactSupportTapped(_ sender: UIButton) {
+        //slide up the mail control view controller
+        //MessageUI seems to run a little... jankily on the simulator.
+        showMailComposer()
+    }
+}
+
+//MARK:- MFMailComposeViewController conformance extension
+extension ViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        if let error = error {
+            displayAlert(title: "Uh-oh!", message: error.localizedDescription)
+            controller.dismiss(animated: true)
+            return
+        }
+        
+        switch result {
+        case .cancelled:
+            print("cancelled")
+        case .failed:
+            print("failed to send")
+        case .saved:
+            print("saved")
+        case .sent:
+            print("email was sent")
+        }
+        
+        controller.dismiss(animated: true)
+    }
 }
 

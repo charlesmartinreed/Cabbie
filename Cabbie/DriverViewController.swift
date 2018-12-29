@@ -116,7 +116,7 @@ class DriverViewController: UITableViewController, CLLocationManagerDelegate {
                 }
             }
         }
-    
+        
         return cell
     }
     
