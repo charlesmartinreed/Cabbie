@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Network
 import MapKit
 import FirebaseDatabase
 import FirebaseAuth
@@ -21,6 +22,8 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate, DriverVi
     var locationManager = CLLocationManager()
     var userLocation = CLLocationCoordinate2D()
     var driverLocation = CLLocationCoordinate2D()
+    let monitor = NWPathMonitor(requiredInterfaceType: .wifi)
+    let queue = DispatchQueue(label: "Monitor")
     
     var cabHasBeenCalled = false
     var driverIsOnTheWay = false
@@ -29,15 +32,33 @@ class RiderViewController: UIViewController, CLLocationManagerDelegate, DriverVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        monitor.start(queue: queue)
         
         //create the driver instance
         let driver = DriverViewController()
         driver.delegate = self
-
+        
+        //MARK:- Network connectivity check
+        checkForNetworkConnectivity()
         initializeLocationManager()
         checkForPendingCabbieRide()
         print("\(driverLocation.latitude)", "\(driverLocation.longitude)")
         
+    }
+    
+    private func checkForNetworkConnectivity() {
+        //closure is called each time the connecton status changes
+        monitor.pathUpdateHandler = { path in
+            //NWPath properties - status and isExpensive
+            //status is whether or not we're connected, isExpensive is true when connected to cellular data or via hotspot
+            if path.status == .satisfied {
+                print("We're connected!")
+            } else {
+                print("No connection.")
+            }
+            
+            print(path.isExpensive)
+        }
     }
     
     //MARK:- Init methods
