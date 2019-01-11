@@ -31,9 +31,42 @@ extension UIView {
         
         //without specifying locations, each color takes up an equal amount of space
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    func createAnimatedGradient(colorOne: UIColor, colorTwo: UIColor, toColorThree: UIColor, toColorFour: UIColor) {
+        let toColors = [toColorThree.cgColor, toColorFour.cgColor]
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor]
+        
+        gradientLayer.locations = [0.0, 0.3]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         
         layer.insertSublayer(gradientLayer, at: 0)
         
+        //animating colors
+        let gradientChangeColor = CABasicAnimation(keyPath: "colors")
+        gradientChangeColor.duration = 10
+        gradientChangeColor.toValue = toColors
+        gradientChangeColor.fillMode = CAMediaTimingFillMode.forwards
+        gradientChangeColor.isRemovedOnCompletion = false
+        gradientChangeColor.autoreverses = true
+        gradientChangeColor.repeatCount = Float.greatestFiniteMagnitude
+        gradientLayer.add(gradientChangeColor, forKey: "colorChange")
+        
+        //animating location
+//        let gradientChangeLocation = CABasicAnimation(keyPath: "locations")
+//        gradientChangeLocation.duration = 2
+//        gradientChangeLocation.toValue = [0.0, 0.7]
+//        gradientChangeLocation.fillMode = CAMediaTimingFillMode.forwards
+//        gradientChangeLocation.isRemovedOnCompletion = false
+//        //gradientChangeLocation.autoreverses = true
+//        gradientChangeLocation.repeatCount = Float.greatestFiniteMagnitude
+//        gradientLayer.add(gradientChangeLocation, forKey: "locationsChange")
     }
 }
