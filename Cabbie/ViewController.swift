@@ -30,6 +30,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        //view.createSimpleGradient(colorOne: Colors.lightPink, colorTwo: Colors.hotPink)
+        view.createComplexGradient(colors: Colors.lightPink, Colors.hotPink, Colors.passionPurple, Colors.plumPurple)
     }
     
     override func viewWillAppear(_ animated: Bool) {
